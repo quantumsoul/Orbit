@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orbit — iPhone launcher concept</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --page: #11141b;
+      --screen: #171a22;
+      --surface: #1c2029;
+      --surface-raised: #242a35;
+      --line: #303744;
+      --text: #d9dee8;
+      --muted: #a0a7b3;
+      --dim: #778395;
+      --lavender: #55b8ff;
+      --mint: #43c7b8;
+      --amber: #e6b92e;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .board {
+      width: min(100%, 1120px);
+      margin: 0 auto;
+      padding: 42px 30px 50px;
+    }
+
+    .masthead {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 21px;
+    }
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 650;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .orbit-mark {
+      position: relative;
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--mint);
+      border-radius: 50%;
+      transform: rotate(-35deg);
+    }
+    .orbit-mark::after {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      top: 1px;
+      right: 0;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+    .eyebrow {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .intro {
+      max-width: 590px;
+      padding: 38px 0 29px;
+    }
+    .intro h1 {
+      margin: 0 0 10px;
+      font-size: clamp(25px, 4vw, 36px);
+      line-height: 1.1;
+      font-weight: 560;
+      letter-spacing: -.04em;
+    }
+    .intro p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .showcase {
+      display: grid;
+      grid-template-columns: minmax(300px, 390px) minmax(260px, 1fr);
+      align-items: center;
+      gap: clamp(42px, 9vw, 116px);
+      padding: 10px 0 35px;
+    }
+    .device-wrap { display: flex; justify-content: center; }
+    .device {
+      position: relative;
+      width: 320px;
+      height: 672px;
+      padding: 8px;
+      border: 1px solid #474250;
+      border-radius: 45px;
+      background: #08080c;
+      box-shadow: 0 0 0 1px #0a090e;
+    }
+    .screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 37px;
+      background: var(--screen);
+      font-family: "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace;
+      font-weight: 400;
+    }
+    .status {
+      height: 44px;
+      padding: 15px 22px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: .02em;
+    }
+    .status-icons { display: flex; gap: 5px; align-items: center; }
+    .signal { display: flex; align-items: end; gap: 2px; height: 10px; }
+    .signal i { display: block; width: 2px; border-radius: 2px; background: var(--text); }
+    .signal i:nth-child(1) { height: 4px; }
+    .signal i:nth-child(2) { height: 6px; }
+    .signal i:nth-child(3) { height: 8px; }
+    .signal i:nth-child(4) { height: 10px; }
+    .wifi {
+      width: 12px;
+      height: 9px;
+      border-top: 1.5px solid var(--text);
+      border-radius: 50% 50% 0 0;
+      position: relative;
+      transform: scaleX(1.2);
+    }
+    .wifi::after {
+      content: "";
+      position: absolute;
+      left: 5px;
+      bottom: 0;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: var(--text);
+    }
+    .battery {
+      width: 17px;
+      height: 8px;
+      border: 1px solid var(--text);
+      border-radius: 2px;
+      padding: 1px;
+      position: relative;
+    }
+    .battery::before {
+      content: "";
+      display: block;
+      width: 72%;
+      height: 100%;
+      border-radius: 1px;
+      background: var(--text);
+    }
+    .battery::after {
+      content: "";
+      position: absolute;
+      right: -3px;
+      top: 2px;
+      width: 2px;
+      height: 3px;
+      border-radius: 0 2px 2px 0;
+      background: var(--text);
+    }
+    .island {
+      position: absolute;
+      z-index: 2;
+      top: 11px;
+      left: 50%;
+      width: 88px;
+      height: 25px;
+      transform: translateX(-50%);
+      border-radius: 18px;
+      background: #050508;
+    }
+
+    .screen-content { padding: 15px 22px 22px; }
+    .date-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .date-label { color: var(--lavender); }
+    .mode-label { color: var(--mint); font-size: 9px; }
+    .clock {
+      margin: 0;
+      font-size: 44px;
+      font-weight: 400;
+      line-height: .98;
+      letter-spacing: -.08em;
+      font-variant-numeric: tabular-nums;
+    }
+    .clock-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    .pixel-sky {
+      width: 51px;
+      height: 51px;
+      overflow: visible;
+      opacity: .78;
+      shape-rendering: crispEdges;
+    }
+    .pixel-sky .orbit-line {
+      fill: none;
+      stroke: #778395;
+      stroke-width: 1;
+      stroke-dasharray: 2 3;
+      opacity: .42;
+    }
+    .pixel-sky .planet { fill: #43c7b8; }
+    .pixel-sky .planet-light { fill: #55b8ff; }
+    .pixel-sky .planet-shade { fill: #285d68; }
+    .pixel-sky .star { fill: #a0a7b3; }
+    .pixel-sky .star-accent { fill: #e6b92e; }
+    .pixel-sky .satellite { fill: #e6b92e; }
+    .pixel-sky .satellite-orbit {
+      transform-origin: 32px 32px;
+      animation: orbit-drift 28s linear infinite;
+    }
+    .pixel-sky .twinkle {
+      animation: pixel-twinkle 4.5s steps(2, end) infinite;
+    }
+    .pixel-sky .twinkle.delay { animation-delay: -2.1s; }
+    @keyframes orbit-drift {
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pixel-twinkle {
+      50% { opacity: .25; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .pixel-sky .satellite-orbit,
+      .pixel-sky .twinkle { animation: none; }
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin: 33px 0 8px;
+    }
+    .section-heading h2 {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: .01em;
+    }
+    .section-heading span {
+      color: var(--dim);
+      font-size: 10px;
+    }
+    .apps {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--line);
+    }
+    .app {
+      min-height: 35px;
+      display: grid;
+      grid-template-columns: 28px 1fr 14px;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      color: var(--text);
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .app-index { color: var(--dim); font-size: 10px; }
+    .app-name { color: var(--lavender); }
+    .app-index { color: var(--mint); }
+    .app-cursor { color: var(--amber); text-align: right; }
+    .list-hint {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 11px;
+      color: var(--dim);
+      font-size: 9px;
+    }
+    .search-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 17px;
+      padding: 10px 0;
+      border-top: 1px solid var(--line);
+      color: var(--mint);
+      font-size: 10px;
+    }
+    .search-row span:last-child { color: var(--amber); }
+    .home-indicator {
+      position: absolute;
+      bottom: 7px;
+      left: 50%;
+      width: 88px;
+      height: 3px;
+      border-radius: 3px;
+      transform: translateX(-50%);
+      background: #f1eef8;
+      opacity: .75;
+    }
+
+    .concept-copy { max-width: 430px; padding-bottom: 10px; }
+    .concept-copy .eyebrow { color: var(--mint); }
+    .concept-copy h2 {
+      margin: 13px 0 12px;
+      font-size: 25px;
+      line-height: 1.2;
+      letter-spacing: -.035em;
+      font-weight: 540;
+    }
+    .concept-copy > p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .principles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 19px 22px;
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+    .principle span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 560;
+    }
+    .principle p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .palette {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 29px;
+    }
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border: 1px solid #ffffff18;
+      border-radius: 50%;
+    }
+    .palette-label {
+      margin-left: 5px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .how-it-works {
+      display: grid;
+      grid-template-columns: minmax(280px, .9fr) minmax(320px, 1.1fr);
+      gap: clamp(30px, 7vw, 90px);
+      align-items: center;
+      padding: 28px 0 35px;
+      border-top: 1px solid var(--line);
+    }
+    .how-copy h2 {
+      margin: 10px 0 10px;
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 540;
+      letter-spacing: -.03em;
+    }
+    .how-copy > p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .steps {
+      display: grid;
+      gap: 14px;
+      margin: 21px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .steps li {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .step-number { color: var(--mint); font-family: "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace; }
+    .steps strong { color: var(--text); font-weight: 560; }
+    .widget-demo {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #171a22;
+    }
+    .widget-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      color: var(--dim);
+      font-size: 9px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .widget {
+      max-width: 365px;
+      margin: 0 auto;
+      padding: 15px 16px 12px;
+      border: 1px solid #303744;
+      border-radius: 14px;
+      background: #1c2029;
+      font-family: "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace;
+    }
+    .widget-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--mint);
+      font-size: 9px;
+    }
+    .widget-date { color: var(--dim); }
+    .widget-title {
+      margin: 12px 0 9px;
+      color: var(--text);
+      font-size: 12px;
+    }
+    .widget-apps { border-top: 1px solid var(--line); }
+    .widget-app {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--lavender);
+      font-size: 11px;
+    }
+    .widget-app span:last-child { color: var(--amber); }
+    .widget-open {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 10px;
+      color: var(--mint);
+      font-size: 9px;
+    }
+    .widget-note {
+      max-width: 365px;
+      margin: 11px auto 0;
+      color: var(--dim);
+      font-size: 10px;
+      line-height: 1.55;
+    }
+    .flow-section {
+      display: grid;
+      grid-template-columns: minmax(290px, .9fr) minmax(340px, 1.1fr);
+      align-items: center;
+      gap: clamp(30px, 7vw, 90px);
+      padding: 35px 0;
+      border-top: 1px solid var(--line);
+    }
+    .flow-intro h2 {
+      margin: 10px 0;
+      font-size: 23px;
+      font-weight: 540;
+      letter-spacing: -.03em;
+    }
+    .flow-intro > p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+    .flow-step-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px 17px;
+      margin-top: 21px;
+    }
+    .flow-step-label {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      color: var(--dim);
+      font-size: 10px;
+    }
+    .flow-step-label b {
+      color: var(--mint);
+      font: 400 10px "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace;
+    }
+    .flow-step-label.active { color: var(--text); }
+    .flow-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-top: 19px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
+    .flow-controls button, .flow-screen button {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--text);
+      font: 400 11px "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace;
+      cursor: pointer;
+    }
+    .flow-controls button { min-width: 76px; padding: 9px 12px; }
+    .flow-controls button:hover, .flow-screen button:hover { border-color: var(--mint); }
+    .flow-controls button:disabled { opacity: .4; cursor: default; }
+    .flow-count {
+      color: var(--dim);
+      font: 400 10px "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace;
+    }
+    .flow-progress {
+      height: 2px;
+      margin-top: 10px;
+      background: var(--line);
+    }
+    .flow-progress span {
+      display: block;
+      width: 12.5%;
+      height: 100%;
+      background: var(--mint);
+      transition: width .2s ease;
+    }
+    .flow-device-wrap { display: flex; justify-content: center; }
+    .flow-device {
+      width: 300px;
+      height: 610px;
+      padding: 7px;
+      border: 1px solid #474250;
+      border-radius: 43px;
+      background: #08080c;
+    }
+    .flow-device .screen { border-radius: 36px; }
+    .flow-screen {
+      display: none;
+      padding: 26px 19px 24px;
+      font-family: "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace;
+    }
+    .flow-screen.active { display: block; }
+    .flow-kicker {
+      color: var(--mint);
+      font-size: 9px;
+      letter-spacing: .08em;
+    }
+    .flow-date {
+      margin-top: 29px;
+      color: var(--lavender);
+      font-size: 9px;
+    }
+    .flow-time {
+      margin: 0;
+      color: var(--text);
+      font-size: 39px;
+      letter-spacing: -.08em;
+    }
+    .flow-screen h3 {
+      margin: 18px 0 10px;
+      color: var(--text);
+      font-size: 19px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+    .flow-screen p {
+      margin: 0 0 17px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+    .flow-screen .mini-app-list {
+      margin: 15px 0;
+      border-top: 1px solid var(--line);
+    }
+    .mini-app-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 34px;
+      border-bottom: 1px solid var(--line);
+      color: var(--lavender);
+      font-size: 11px;
+    }
+    .mini-app-row[hidden] { display: none; }
+    .mini-app-row span:last-child { color: var(--amber); }
+    .mini-app-row small { color: var(--dim); font-size: 8px; }
+    .mini-app-row.selected { color: var(--text); }
+    .flow-screen button {
+      width: 100%;
+      padding: 10px 12px;
+      color: var(--mint);
+      text-align: left;
+    }
+    .flow-screen button.secondary {
+      margin-top: 8px;
+      color: var(--muted);
+    }
+    .flow-search {
+      width: 100%;
+      margin: 7px 0 12px;
+      padding: 10px 9px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      outline: none;
+      background: var(--surface);
+      color: var(--text);
+      font: 400 10px "Hack Nerd Font", "Hack Nerd Font Mono", Hack, ui-monospace, monospace;
+    }
+    .flow-search:focus { border-color: var(--mint); }
+    .flow-hint {
+      margin-top: 12px !important;
+      color: var(--dim) !important;
+      font-size: 8px !important;
+    }
+    .flow-info {
+      margin: 13px 0;
+      padding: 10px;
+      border-left: 2px solid var(--amber);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.6;
+    }
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 10px;
+    }
+    .toggle-pill {
+      width: 27px;
+      height: 15px;
+      border-radius: 9px;
+      background: var(--mint);
+      position: relative;
+    }
+    .toggle-pill::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--screen);
+    }
+    .footnote {
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: var(--dim);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    @media (max-width: 720px) {
+      .board { padding: 25px 18px 35px; }
+      .masthead .eyebrow { display: none; }
+      .showcase { grid-template-columns: 1fr; gap: 33px; padding-top: 0; }
+      .concept-copy { max-width: 430px; margin: 0 auto; }
+      .intro { padding-top: 30px; }
+      .how-it-works { grid-template-columns: 1fr; gap: 25px; }
+      .flow-section { grid-template-columns: 1fr; gap: 26px; }
+      .flow-intro { max-width: 480px; margin: 0 auto; }
+    }
+    @media (max-width: 360px) {
+      .device { transform: scale(.92); transform-origin: top center; margin-bottom: -54px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="board">
+    <header class="masthead">
+      <div class="wordmark"><span class="orbit-mark" aria-hidden="true"></span> Orbit</div>
+      <div class="eyebrow">A calmer first screen · iPhone concept</div>
+    </header>
+
+    <section class="intro">
+      <h1>Your phone, back in your orbit.</h1>
+      <p>A text-first iPhone home screen with AstroVim’s deep charcoal, electric blue, teal, and warm yellow—kept deliberately quiet.</p>
+    </section>
+
+    <section class="showcase" aria-label="Launcher concept preview">
+      <div class="device-wrap">
+        <div class="device">
+          <div class="screen">
+            <div class="island"></div>
+            <div class="status">
+              <span>9:41</span>
+              <div class="status-icons" aria-hidden="true">
+                <span class="signal"><i></i><i></i><i></i><i></i></span>
+                <span class="wifi"></span><span class="battery"></span>
+              </div>
+            </div>
+            <div class="screen-content">
+              <div class="date-row"><span class="date-label">SATURDAY, OCTOBER 17</span><span class="mode-label">NORMAL</span></div>
+              <div class="clock-row">
+                <div class="clock">9:41</div>
+                <svg class="pixel-sky" viewBox="0 0 64 64" role="img" aria-label="A tiny pixel planet in orbit">
+                  <rect class="star twinkle" x="8" y="14" width="2" height="2"/>
+                  <rect class="star-accent twinkle delay" x="51" y="10" width="2" height="2"/>
+                  <rect class="star" x="53" y="46" width="2" height="2"/>
+                  <rect class="star twinkle delay" x="12" y="48" width="2" height="2"/>
+                  <ellipse class="orbit-line" cx="32" cy="32" rx="22" ry="11" transform="rotate(-28 32 32)"/>
+                  <rect class="planet-shade" x="25" y="26" width="14" height="12"/>
+                  <rect class="planet" x="27" y="22" width="10" height="4"/>
+                  <rect class="planet" x="23" y="26" width="18" height="8"/>
+                  <rect class="planet-light" x="25" y="26" width="4" height="4"/>
+                  <rect class="planet" x="25" y="34" width="14" height="4"/>
+                  <g class="satellite-orbit">
+                    <rect class="satellite" x="48" y="29" width="3" height="3"/>
+                    <rect class="satellite" x="51" y="30" width="2" height="2"/>
+                  </g>
+                </svg>
+              </div>
+
+              <div class="section-heading"><h2>FAVORITES</h2><span>01 — 06</span></div>
+              <div class="apps" role="list" aria-label="Selected apps">
+                <div class="app selected" role="listitem"><span class="app-index">&gt;</span><span class="app-name">Messages</span><span class="app-cursor">m</span></div>
+                <div class="app" role="listitem"><span class="app-index"></span><span class="app-name">Phone</span><span class="app-cursor">p</span></div>
+                <div class="app" role="listitem"><span class="app-index"></span><span class="app-name">Calendar</span><span class="app-cursor">c</span></div>
+                <div class="app" role="listitem"><span class="app-index"></span><span class="app-name">Notes</span><span class="app-cursor">n</span></div>
+                <div class="app" role="listitem"><span class="app-index"></span><span class="app-name">Music</span><span class="app-cursor">u</span></div>
+                <div class="app" role="listitem"><span class="app-index"></span><span class="app-name">Camera</span><span class="app-cursor">a</span></div>
+              </div>
+              <div class="list-hint"><span>TAP TO OPEN</span><span>HOLD TO EDIT</span></div>
+              <div class="search-row"><span>SEARCH ALL APPS</span><span>/</span></div>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-copy">
+        <div class="eyebrow">Direction 01 · AstroVim palette</div>
+        <h2>Just the essentials.</h2>
+        <p>The Orbit app is your full text-first launcher: favorites up front, search for everything else. Add its widget to your iPhone Home Screen for quick access without making Orbit the default launcher.</p>
+        <div class="principles">
+          <div class="principle"><span>Words, not icons</span><p>Favorites are named, ordered, and easy to open.</p></div>
+          <div class="principle"><span>Search when needed</span><p>Find the rest without scrolling through a giant grid.</p></div>
+          <div class="principle"><span>AstroVim colors</span><p>Blue names, teal focus, yellow key hints on deep slate.</p></div>
+          <div class="principle"><span>Optional focus</span><p>Use iOS Focus or Screen Time tools separately; never block essentials by default.</p></div>
+        </div>
+        <div class="palette" aria-label="Color palette">
+          <span class="swatch" style="background:#171a22"></span>
+          <span class="swatch" style="background:#55b8ff"></span>
+          <span class="swatch" style="background:#43c7b8"></span>
+          <span class="swatch" style="background:#e6b92e"></span>
+          <span class="palette-label">slate · blue · teal · yellow</span>
+        </div>
+      </div>
+    </section>
+    <section class="how-it-works" aria-label="How Orbit works on iPhone">
+      <div class="how-copy">
+        <div class="eyebrow">Designed for iOS, not around a fake replacement</div>
+        <h2>Your Home Screen stays yours.</h2>
+        <p>Orbit is a companion app and widget, like other minimalist iPhone launchers. Keep iOS as it is; place Orbit where you want a calmer way into your day.</p>
+        <ol class="steps">
+          <li><span class="step-number">01</span><span><strong>Choose your essentials.</strong> Curate and reorder a short list in Orbit. No noisy app grid.</span></li>
+          <li><span class="step-number">02</span><span><strong>Add the widget.</strong> Put the text-first Orbit widget on your existing Home Screen.</span></li>
+          <li><span class="step-number">03</span><span><strong>Tap or search.</strong> Open supported apps directly; use Orbit search or iOS Home when an app needs a system hand-off.</span></li>
+        </ol>
+      </div>
+      <div class="widget-demo">
+        <div class="widget-caption"><span>Home Screen widget</span><span>Medium · concept</span></div>
+        <div class="widget" aria-label="Orbit widget concept">
+          <div class="widget-top"><span>ORBIT / FAVORITES</span><span class="widget-date">SAT · 9:41</span></div>
+          <div class="widget-title">Open with intention.</div>
+          <div class="widget-apps">
+            <div class="widget-app"><span>Messages</span><span>m</span></div>
+            <div class="widget-app"><span>Phone</span><span>p</span></div>
+            <div class="widget-app"><span>Maps</span><span>g</span></div>
+          </div>
+          <div class="widget-open"><span>OPEN ORBIT</span><span>SEARCH ALL &gt;</span></div>
+        </div>
+        <p class="widget-note">Widget entries can only launch actions iOS and each app support. Orbit should explain the setup for unsupported apps and never imply it can discover or open every installed app automatically.</p>
+      </div>
+    </section>
+    <section class="flow-section" aria-label="Orbit app screens in order">
+      <div class="flow-intro">
+        <div class="eyebrow">The product flow · screen by screen</div>
+        <h2>From first open to everyday use.</h2>
+        <p>Step through the proposed Orbit experience. Setup stays short, the favorite list stays one tap away, and search and optional focus tools are there when you need them.</p>
+        <div class="flow-step-list" aria-label="Screens in this flow">
+          <div class="flow-step-label active" data-flow-label><b>01</b> Welcome</div>
+          <div class="flow-step-label" data-flow-label><b>02</b> Choose apps</div>
+          <div class="flow-step-label" data-flow-label><b>03</b> Add widget</div>
+          <div class="flow-step-label" data-flow-label><b>04</b> Home</div>
+          <div class="flow-step-label" data-flow-label><b>05</b> Search</div>
+          <div class="flow-step-label" data-flow-label><b>06</b> App handoff</div>
+          <div class="flow-step-label" data-flow-label><b>07</b> Edit favorites</div>
+          <div class="flow-step-label" data-flow-label><b>08</b> Optional Focus</div>
+        </div>
+        <div class="flow-controls">
+          <button type="button" data-flow-prev disabled>BACK</button>
+          <span class="flow-count" aria-live="polite" data-flow-count>01 / 08</span>
+          <button type="button" data-flow-next>NEXT</button>
+        </div>
+        <div class="flow-progress" aria-hidden="true"><span data-flow-progress></span></div>
+      </div>
+      <div class="flow-device-wrap">
+        <div class="flow-device">
+          <div class="screen">
+            <div class="island"></div>
+            <div class="status">
+              <span>9:41</span>
+              <div class="status-icons" aria-hidden="true">
+                <span class="signal"><i></i><i></i><i></i><i></i></span>
+                <span class="wifi"></span><span class="battery"></span>
+              </div>
+            </div>
+            <div class="flow-screen active" data-flow-screen="0">
+              <div class="flow-kicker">ORBIT / START</div>
+              <h3>A quieter way<br>to open your phone.</h3>
+              <p>Your apps, in words. Your Home Screen, still yours.</p>
+              <div class="flow-info">Orbit is a companion app and Home Screen widget—not a replacement for iOS Home.</div>
+              <button type="button" data-flow-next>SET UP ORBIT &gt;</button>
+              <p class="flow-hint">No account needed for the core launcher.</p>
+            </div>
+            <div class="flow-screen" data-flow-screen="1">
+              <div class="flow-kicker">SETUP / 01</div>
+              <h3>Choose your essentials.</h3>
+              <p>Pin a few apps you use every day. Orbit can only open apps through supported links or actions you configure.</p>
+              <div class="mini-app-list">
+                <div class="mini-app-row selected"><span>Phone</span><span>✓</span></div>
+                <div class="mini-app-row selected"><span>Messages</span><span>✓</span></div>
+                <div class="mini-app-row selected"><span>Maps</span><span>✓</span></div>
+                <div class="mini-app-row"><span>Notes</span><span>+</span></div>
+                <div class="mini-app-row"><span>Other apps</span><small>ADD A SHORTCUT</small></div>
+              </div>
+              <button type="button" data-flow-next>CONTINUE &gt;</button>
+              <p class="flow-hint">Example list only; app availability varies on iOS.</p>
+            </div>
+            <div class="flow-screen" data-flow-screen="2">
+              <div class="flow-kicker">SETUP / 02</div>
+              <h3>Put Orbit within reach.</h3>
+              <p>Add Orbit’s medium widget to the Home Screen page you want to use as your calmer starting point.</p>
+              <div class="flow-info">Touch and hold the Home Screen → Edit → Add Widget → Orbit. Choose the text-first Favorites widget.</div>
+              <div class="widget" style="padding:12px;margin:16px 0">
+                <div class="widget-top"><span>ORBIT / FAVORITES</span><span class="widget-date">9:41</span></div>
+                <div class="widget-apps" style="margin-top:9px">
+                  <div class="widget-app"><span>Phone</span><span>p</span></div>
+                  <div class="widget-app"><span>Messages</span><span>m</span></div>
+                  <div class="widget-app"><span>Maps</span><span>g</span></div>
+                </div>
+              </div>
+              <button type="button" data-flow-next>DONE, GO TO HOME &gt;</button>
+            </div>
+            <div class="flow-screen" data-flow-screen="3">
+              <div class="flow-kicker">ORBIT / HOME</div>
+              <div class="flow-date">SUNDAY, OCTOBER 18</div>
+              <div class="clock-row" style="margin-top:15px">
+                <div class="flow-time">9:41</div>
+                <svg class="pixel-sky" viewBox="0 0 64 64" aria-hidden="true">
+                  <rect class="star twinkle" x="8" y="14" width="2" height="2"/>
+                  <rect class="star-accent twinkle delay" x="51" y="10" width="2" height="2"/>
+                  <rect class="star" x="53" y="46" width="2" height="2"/>
+                  <rect class="star twinkle delay" x="12" y="48" width="2" height="2"/>
+                  <ellipse class="orbit-line" cx="32" cy="32" rx="22" ry="11" transform="rotate(-28 32 32)"/>
+                  <rect class="planet-shade" x="25" y="26" width="14" height="12"/>
+                  <rect class="planet" x="27" y="22" width="10" height="4"/>
+                  <rect class="planet" x="23" y="26" width="18" height="8"/>
+                  <rect class="planet-light" x="25" y="26" width="4" height="4"/>
+                  <rect class="planet" x="25" y="34" width="14" height="4"/>
+                  <g class="satellite-orbit">
+                    <rect class="satellite" x="48" y="29" width="3" height="3"/>
+                    <rect class="satellite" x="51" y="30" width="2" height="2"/>
+                  </g>
+                </svg>
+              </div>
+              <div class="section-heading"><h2>FAVORITES</h2><span>01 — 06</span></div>
+              <div class="mini-app-list">
+                <div class="mini-app-row selected"><span>&gt; &nbsp; Phone</span><span>p</span></div>
+                <div class="mini-app-row"><span>Messages</span><span>m</span></div>
+                <div class="mini-app-row"><span>Maps</span><span>g</span></div>
+                <div class="mini-app-row"><span>Calendar</span><span>c</span></div>
+                <div class="mini-app-row"><span>Notes</span><span>n</span></div>
+              </div>
+              <button type="button" data-flow-next>SEARCH ALL APPS &gt;</button>
+              <p class="flow-hint">Tap a favorite to open. Keep using iOS Home any time.</p>
+            </div>
+            <div class="flow-screen" data-flow-screen="4">
+              <div class="flow-kicker">ORBIT / SEARCH</div>
+              <h3>Find an app.</h3>
+              <label for="flow-search" class="flow-hint">SEARCH NAME OR ACTION</label>
+              <input id="flow-search" class="flow-search" type="search" placeholder="Try “maps”" autocomplete="off">
+              <div class="mini-app-list" data-search-results>
+                <div class="mini-app-row" data-search-name="Phone call"><span>Phone</span><small>CALL</small></div>
+                <div class="mini-app-row" data-search-name="Messages text"><span>Messages</span><small>MESSAGE</small></div>
+                <div class="mini-app-row" data-search-name="Maps directions"><span>Maps</span><small>DIRECTIONS</small></div>
+                <div class="mini-app-row" data-search-name="Calendar event"><span>Calendar</span><small>EVENTS</small></div>
+                <div class="mini-app-row" data-search-name="Notes write"><span>Notes</span><small>NOTES</small></div>
+              </div>
+              <p class="flow-hint">Search narrows your configured apps and shortcuts.</p>
+              <button type="button" data-flow-next>VIEW APP ACCESS &gt;</button>
+            </div>
+            <div class="flow-screen" data-flow-screen="5">
+              <div class="flow-kicker">ORBIT / OPEN APP</div>
+              <h3>One tap, when supported.</h3>
+              <p>Orbit opens Phone, Messages, Maps, or another app through its supported link or action.</p>
+              <div class="flow-info">If iOS or an app does not provide a direct route, Orbit explains the available Shortcut option. It never pretends every app is launchable.</div>
+              <button type="button" data-flow-next>GOT IT &gt;</button>
+              <button type="button" class="secondary" data-flow-go="1">SET UP AN APP SHORTCUT</button>
+              <p class="flow-hint">The app’s own settings and behavior remain unchanged.</p>
+            </div>
+            <div class="flow-screen" data-flow-screen="6">
+              <div class="flow-kicker">ORBIT / PERSONALIZE</div>
+              <h3>Keep the list yours.</h3>
+              <p>Reorder favorites and remove anything you no longer want on the first screen.</p>
+              <div class="mini-app-list">
+                <div class="mini-app-row"><span>≡ &nbsp; Phone</span><span>−</span></div>
+                <div class="mini-app-row"><span>≡ &nbsp; Messages</span><span>−</span></div>
+                <div class="mini-app-row"><span>≡ &nbsp; Maps</span><span>−</span></div>
+                <div class="mini-app-row"><span>≡ &nbsp; Calendar</span><span>−</span></div>
+              </div>
+              <button type="button" data-flow-next>OPTIONAL FOCUS &gt;</button>
+              <p class="flow-hint">Search remains available for apps outside favorites.</p>
+            </div>
+            <div class="flow-screen" data-flow-screen="7">
+              <div class="flow-kicker">ORBIT / OPTIONAL</div>
+              <h3>Focus, on your terms.</h3>
+              <p>The basic app list works without blocking anything. If you want extra guardrails, choose them separately.</p>
+              <div class="toggle-row"><span>Show focus status</span><span class="toggle-pill"></span></div>
+              <div class="toggle-row"><span>Use iOS Focus</span><span>SET UP ↗</span></div>
+              <div class="flow-info">App shielding requires Apple’s Screen Time permission and is always optional and reversible.</div>
+              <button type="button" data-flow-go="3">BACK TO HOME &gt;</button>
+              <button type="button" class="secondary" data-flow-go="0">RESTART WALKTHROUGH</button>
+            </div>
+            <div class="home-indicator"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="footnote">Concept preview only. iOS keeps control of Home and app launching. Orbit can offer a customizable app list, search, widgets, and supported links or shortcuts; app availability may vary.</footer>
+  </main>
+  <script>
+    (() => {
+      const screens = Array.from(document.querySelectorAll("[data-flow-screen]"));
+      const labels = Array.from(document.querySelectorAll("[data-flow-label]"));
+      const count = document.querySelector("[data-flow-count]");
+      const progress = document.querySelector("[data-flow-progress]");
+      const previous = document.querySelector("[data-flow-prev]");
+      const next = document.querySelector(".flow-controls [data-flow-next]");
+      const search = document.querySelector("#flow-search");
+      let current = 0;
+
+      const showScreen = (index) => {
+        current = Math.max(0, Math.min(screens.length - 1, index));
+        screens.forEach((screen, i) => screen.classList.toggle("active", i === current));
+        labels.forEach((label, i) => label.classList.toggle("active", i === current));
+        count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(screens.length).padStart(2, "0")}`;
+        progress.style.width = `${((current + 1) / screens.length) * 100}%`;
+        previous.disabled = current === 0;
+        next.disabled = current === screens.length - 1;
+      };
+
+      document.querySelectorAll("[data-flow-next]").forEach((button) => {
+        button.addEventListener("click", () => showScreen(current + 1));
+      });
+      document.querySelectorAll("[data-flow-prev]").forEach((button) => {
+        button.addEventListener("click", () => showScreen(current - 1));
+      });
+      document.querySelectorAll("[data-flow-go]").forEach((button) => {
+        button.addEventListener("click", () => showScreen(Number(button.dataset.flowGo)));
+      });
+      search.addEventListener("input", () => {
+        const query = search.value.trim().toLowerCase();
+        document.querySelectorAll("[data-search-name]").forEach((row) => {
+          row.hidden = !row.dataset.searchName.toLowerCase().includes(query);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
